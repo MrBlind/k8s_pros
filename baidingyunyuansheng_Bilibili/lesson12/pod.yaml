@@ -1,0 +1,13 @@
+apiVersion: "demo.example.com/v1"
+kind: Demo
+metadata:
+  name: crd-demo
+  labels:
+    app: Title
+spec:
+  containers:
+    - name: Title
+      image: Image
+      imagePullPolicy: IfNotPresent
+  restartPolicy: Always
+  
