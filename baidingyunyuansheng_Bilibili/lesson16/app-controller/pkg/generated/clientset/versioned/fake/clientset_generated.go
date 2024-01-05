@@ -19,14 +19,14 @@ limitations under the License.
 package fake
 
 import (
-	clientset "github.com/operator-crd/pkg/generated/clientset/versioned"
-	crdv1 "github.com/operator-crd/pkg/generated/clientset/versioned/typed/crd.example.com/v1"
-	fakecrdv1 "github.com/operator-crd/pkg/generated/clientset/versioned/typed/crd.example.com/v1/fake"
 	"k8s.io/apimachinery/pkg/runtime"
 	"k8s.io/apimachinery/pkg/watch"
 	"k8s.io/client-go/discovery"
 	fakediscovery "k8s.io/client-go/discovery/fake"
 	"k8s.io/client-go/testing"
+	clientset "app-controller/pkg/generated/clientset/versioned"
+	appcontrollerv1alpha1 "app-controller/pkg/generated/clientset/versioned/typed/appcontroller/v1alpha1"
+	fakeappcontrollerv1alpha1 "app-controller/pkg/generated/clientset/versioned/typed/appcontroller/v1alpha1/fake"
 )
 
 // NewSimpleClientset returns a clientset that will respond with the provided objects.
@@ -79,7 +79,7 @@ var (
 	_ testing.FakeClient  = &Clientset{}
 )
 
-// CrdV1 retrieves the CrdV1Client
-func (c *Clientset) CrdV1() crdv1.CrdV1Interface {
-	return &fakecrdv1.FakeCrdV1{Fake: &c.Fake}
+// appcontrollerV1alpha1 retrieves the appcontrollerV1alpha1Client
+func (c *Clientset) appcontrollerV1alpha1() appcontrollerv1alpha1.appcontrollerV1alpha1Interface {
+	return &fakeappcontrollerv1alpha1.FakeappcontrollerV1alpha1{Fake: &c.Fake}
 }

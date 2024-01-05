@@ -19,22 +19,22 @@ limitations under the License.
 package fake
 
 import (
-	v1 "github.com/operator-crd/pkg/generated/clientset/versioned/typed/crd.example.com/v1"
 	rest "k8s.io/client-go/rest"
 	testing "k8s.io/client-go/testing"
+	v1alpha1 "app-controller/pkg/generated/clientset/versioned/typed/appcontroller/v1alpha1"
 )
 
-type FakeCrdV1 struct {
+type FakeappcontrollerV1alpha1 struct {
 	*testing.Fake
 }
 
-func (c *FakeCrdV1) Foos(namespace string) v1.FooInterface {
+func (c *FakeappcontrollerV1alpha1) Foos(namespace string) v1alpha1.FooInterface {
 	return &FakeFoos{c, namespace}
 }
 
 // RESTClient returns a RESTClient that is used to communicate
 // with API server by this client implementation.
-func (c *FakeCrdV1) RESTClient() rest.Interface {
+func (c *FakeappcontrollerV1alpha1) RESTClient() rest.Interface {
 	var ret *rest.RESTClient
 	return ret
 }

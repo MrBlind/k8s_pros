@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="WebServers">
+    <option name="servers">
+      <webServer id="348b2645-ece3-46b9-a68d-8bdc7da03a0f" name="master">
+        <fileTransfer rootFolder="/root/k8s/baidingyunyuansheng_Bilibili/lesson16" accessType="SFTP" host="192.168.62.4" port="22" sshConfigId="83d573b8-59d5-4c8c-af4b-78c7ba9467ec" sshConfig="root@192.168.62.4:22 password">
+          <advancedOptions>
+            <advancedOptions dataProtectionLevel="Private" passiveMode="true" shareSSLContext="true" />
+          </advancedOptions>
+        </fileTransfer>
+      </webServer>
+    </option>
+  </component>
+</project>

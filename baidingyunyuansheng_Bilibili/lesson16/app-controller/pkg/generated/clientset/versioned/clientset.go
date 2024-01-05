@@ -22,27 +22,26 @@ import (
 	"fmt"
 	"net/http"
 
-	crdv1 "github.com/operator-crd/pkg/generated/clientset/versioned/typed/crd.example.com/v1"
 	discovery "k8s.io/client-go/discovery"
 	rest "k8s.io/client-go/rest"
 	flowcontrol "k8s.io/client-go/util/flowcontrol"
+	appcontrollerv1alpha1 "app-controller/pkg/generated/clientset/versioned/typed/appcontroller/v1alpha1"
 )
 
 type Interface interface {
 	Discovery() discovery.DiscoveryInterface
-	CrdV1() crdv1.CrdV1Interface
+	appcontrollerV1alpha1() appcontrollerv1alpha1.appcontrollerV1alpha1Interface
 }
 
-// Clientset contains the clients for groups. Each group has exactly one
-// version included in a Clientset.
+// Clientset contains the clients for groups.
 type Clientset struct {
 	*discovery.DiscoveryClient
-	crdV1 *crdv1.CrdV1Client
+	appcontrollerV1alpha1 *appcontrollerv1alpha1.appcontrollerV1alpha1Client
 }
 
-// CrdV1 retrieves the CrdV1Client
-func (c *Clientset) CrdV1() crdv1.CrdV1Interface {
-	return c.crdV1
+// appcontrollerV1alpha1 retrieves the appcontrollerV1alpha1Client
+func (c *Clientset) appcontrollerV1alpha1() appcontrollerv1alpha1.appcontrollerV1alpha1Interface {
+	return c.appcontrollerV1alpha1
 }
 
 // Discovery retrieves the DiscoveryClient
@@ -60,6 +59,10 @@ func (c *Clientset) Discovery() discovery.DiscoveryInterface {
 // where httpClient was generated with rest.HTTPClientFor(c).
 func NewForConfig(c *rest.Config) (*Clientset, error) {
 	configShallowCopy := *c
+
+	if configShallowCopy.UserAgent == "" {
+		configShallowCopy.UserAgent = rest.DefaultKubernetesUserAgent()
+	}
 
 	// share the transport between all clients
 	httpClient, err := rest.HTTPClientFor(&configShallowCopy)
@@ -85,7 +88,7 @@ func NewForConfigAndClient(c *rest.Config, httpClient *http.Client) (*Clientset,
 
 	var cs Clientset
 	var err error
-	cs.crdV1, err = crdv1.NewForConfigAndClient(&configShallowCopy, httpClient)
+	cs.appcontrollerV1alpha1, err = appcontrollerv1alpha1.NewForConfigAndClient(&configShallowCopy, httpClient)
 	if err != nil {
 		return nil, err
 	}
@@ -110,7 +113,7 @@ func NewForConfigOrDie(c *rest.Config) *Clientset {
 // New creates a new Clientset for the given RESTClient.
 func New(c rest.Interface) *Clientset {
 	var cs Clientset
-	cs.crdV1 = crdv1.New(c)
+	cs.appcontrollerV1alpha1 = appcontrollerv1alpha1.New(c)
 
 	cs.DiscoveryClient = discovery.NewDiscoveryClient(c)
 	return &cs
