@@ -51,7 +51,7 @@ type fixture struct {
 	client     *fake.Clientset
 	kubeclient *k8sfake.Clientset
 	// Objects to put in the store.
-	fooLister        []*appcontroller.Foo
+	fooLister        []*appcontroller.App
 	deploymentLister []*apps.Deployment
 	// Actions expected to happen on the client.
 	kubeactions []core.Action
@@ -69,14 +69,14 @@ func newFixture(t *testing.T) *fixture {
 	return f
 }
 
-func newFoo(name string, replicas *int32) *appcontroller.Foo {
-	return &appcontroller.Foo{
+func newApp(name string, replicas *int32) *appcontroller.App {
+	return &appcontroller.App{
 		TypeMeta: metav1.TypeMeta{APIVersion: appcontroller.SchemeGroupVersion.String()},
 		ObjectMeta: metav1.ObjectMeta{
 			Name:      name,
 			Namespace: metav1.NamespaceDefault,
 		},
-		Spec: appcontroller.FooSpec{
+		Spec: appcontroller.AppSpec{
 			DeploymentName: fmt.Sprintf("%s-deployment", name),
 			Replicas:       replicas,
 		},
@@ -91,14 +91,14 @@ func (f *fixture) newController(ctx context.Context) (*Controller, informers.Sha
 	k8sI := kubeinformers.NewSharedInformerFactory(f.kubeclient, noResyncPeriodFunc())
 
 	c := NewController(ctx, f.kubeclient, f.client,
-		k8sI.Apps().V1().Deployments(), i.appcontroller().V1alpha1().Foos())
+		k8sI.Apps().V1().Deployments(), i.appcontroller().V1alpha1().Apps())
 
 	c.foosSynced = alwaysReady
 	c.deploymentsSynced = alwaysReady
 	c.recorder = &record.FakeRecorder{}
 
 	for _, f := range f.fooLister {
-		i.appcontroller().V1alpha1().Foos().Informer().GetIndexer().Add(f)
+		i.appcontroller().V1alpha1().Apps().Informer().GetIndexer().Add(f)
 	}
 
 	for _, d := range f.deploymentLister {
@@ -235,12 +235,12 @@ func (f *fixture) expectUpdateDeploymentAction(d *apps.Deployment) {
 	f.kubeactions = append(f.kubeactions, core.NewUpdateAction(schema.GroupVersionResource{Resource: "deployments"}, d.Namespace, d))
 }
 
-func (f *fixture) expectUpdateFooStatusAction(foo *appcontroller.Foo) {
+func (f *fixture) expectUpdateAppStatusAction(foo *appcontroller.App) {
 	action := core.NewUpdateSubresourceAction(schema.GroupVersionResource{Resource: "foos"}, "status", foo.Namespace, foo)
 	f.actions = append(f.actions, action)
 }
 
-func getKey(foo *appcontroller.Foo, t *testing.T) string {
+func getKey(foo *appcontroller.App, t *testing.T) string {
 	key, err := cache.DeletionHandlingMetaNamespaceKeyFunc(foo)
 	if err != nil {
 		t.Errorf("Unexpected error getting key for foo %v: %v", foo.Name, err)
@@ -251,7 +251,7 @@ func getKey(foo *appcontroller.Foo, t *testing.T) string {
 
 func TestCreatesDeployment(t *testing.T) {
 	f := newFixture(t)
-	foo := newFoo("test", int32Ptr(1))
+	foo := newApp("test", int32Ptr(1))
 	_, ctx := ktesting.NewTestContext(t)
 
 	f.fooLister = append(f.fooLister, foo)
@@ -259,14 +259,14 @@ func TestCreatesDeployment(t *testing.T) {
 
 	expDeployment := newDeployment(foo)
 	f.expectCreateDeploymentAction(expDeployment)
-	f.expectUpdateFooStatusAction(foo)
+	f.expectUpdateAppStatusAction(foo)
 
 	f.run(ctx, getKey(foo, t))
 }
 
 func TestDoNothing(t *testing.T) {
 	f := newFixture(t)
-	foo := newFoo("test", int32Ptr(1))
+	foo := newApp("test", int32Ptr(1))
 	_, ctx := ktesting.NewTestContext(t)
 
 	d := newDeployment(foo)
@@ -276,13 +276,13 @@ func TestDoNothing(t *testing.T) {
 	f.deploymentLister = append(f.deploymentLister, d)
 	f.kubeobjects = append(f.kubeobjects, d)
 
-	f.expectUpdateFooStatusAction(foo)
+	f.expectUpdateAppStatusAction(foo)
 	f.run(ctx, getKey(foo, t))
 }
 
 func TestUpdateDeployment(t *testing.T) {
 	f := newFixture(t)
-	foo := newFoo("test", int32Ptr(1))
+	foo := newApp("test", int32Ptr(1))
 	_, ctx := ktesting.NewTestContext(t)
 
 	d := newDeployment(foo)
@@ -296,14 +296,14 @@ func TestUpdateDeployment(t *testing.T) {
 	f.deploymentLister = append(f.deploymentLister, d)
 	f.kubeobjects = append(f.kubeobjects, d)
 
-	f.expectUpdateFooStatusAction(foo)
+	f.expectUpdateAppStatusAction(foo)
 	f.expectUpdateDeploymentAction(expDeployment)
 	f.run(ctx, getKey(foo, t))
 }
 
 func TestNotControlledByUs(t *testing.T) {
 	f := newFixture(t)
-	foo := newFoo("test", int32Ptr(1))
+	foo := newApp("test", int32Ptr(1))
 	_, ctx := ktesting.NewTestContext(t)
 
 	d := newDeployment(foo)

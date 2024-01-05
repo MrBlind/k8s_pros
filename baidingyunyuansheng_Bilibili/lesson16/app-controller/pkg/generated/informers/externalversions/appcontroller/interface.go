@@ -19,8 +19,8 @@ limitations under the License.
 package appcontroller
 
 import (
-	internalinterfaces "app-controller/pkg/generated/informers/externalversions/internalinterfaces"
 	v1alpha1 "app-controller/pkg/generated/informers/externalversions/appcontroller/v1alpha1"
+	internalinterfaces "app-controller/pkg/generated/informers/externalversions/internalinterfaces"
 )
 
 // Interface provides access to each of this group's versions.

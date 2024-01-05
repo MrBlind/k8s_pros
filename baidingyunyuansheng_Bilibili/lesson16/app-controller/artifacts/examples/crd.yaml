@@ -32,6 +32,6 @@ spec:
                 availableReplicas:
                   type: integer
   names:
-    kind: Foo
+    kind: App
     plural: foos
   scope: Namespaced

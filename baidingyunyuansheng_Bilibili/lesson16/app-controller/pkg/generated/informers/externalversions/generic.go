@@ -20,10 +20,10 @@ package externalversions
 
 import (
 	"fmt"
+	v1alpha1 "lesson16/pkg/apis/appcontroller/v1alpha1"
 
 	schema "k8s.io/apimachinery/pkg/runtime/schema"
 	cache "k8s.io/client-go/tools/cache"
-	v1alpha1 "app-controller/pkg/apis/appcontroller/v1alpha1"
 )
 
 // GenericInformer is type of SharedIndexInformer which will locate and delegate to other
@@ -53,8 +53,8 @@ func (f *genericInformer) Lister() cache.GenericLister {
 func (f *sharedInformerFactory) ForResource(resource schema.GroupVersionResource) (GenericInformer, error) {
 	switch resource {
 	// Group=appcontroller.k8s.io, Version=v1alpha1
-	case v1alpha1.SchemeGroupVersion.WithResource("foos"):
-		return &genericInformer{resource: resource.GroupResource(), informer: f.appcontroller().V1alpha1().Foos().Informer()}, nil
+	case v1alpha1.SchemeGroupVersion.WithResource("apps"):
+		return &genericInformer{resource: resource.GroupResource(), informer: f.Appcontroller().V1alpha1().Apps().Informer()}, nil
 
 	}
 

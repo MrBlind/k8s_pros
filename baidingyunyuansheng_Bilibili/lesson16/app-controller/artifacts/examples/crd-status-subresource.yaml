@@ -36,6 +36,6 @@ spec:
         # enables the status subresource
         status: {}
   names:
-    kind: Foo
+    kind: App
     plural: foos
   scope: Namespaced

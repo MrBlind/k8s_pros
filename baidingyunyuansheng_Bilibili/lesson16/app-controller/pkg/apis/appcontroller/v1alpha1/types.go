@@ -23,13 +23,13 @@ import (
 // +genclient
 // +k8s:deepcopy-gen:interfaces=k8s.io/apimachinery/pkg/runtime.Object
 
-// Foo is a specification for a Foo resource
-type Foo struct {
+// App is a specification for a App resource
+type App struct {
 	metav1.TypeMeta   `json:",inline"`
 	metav1.ObjectMeta `json:"metadata,omitempty"`
 
-	Spec   FooSpec   `json:"spec"`
-	Status FooStatus `json:"status"`
+	Spec   AppSpec   `json:"spec"`
+	Status AppStatus `json:"status"`
 }
 
 type DeploymentSpec struct {
@@ -45,8 +45,8 @@ type IngressSpec struct {
 	Name string `json:"name"`
 }
 
-// FooSpec is the spec for a Foo resource
-type FooSpec struct {
+// AppSpec is the spec for a App resource
+type AppSpec struct {
 	//DeploymentName string `json:"deploymentName"`
 	//Replicas       *int32 `json:"replicas"`
 	Deployment DeploymentSpec `json:"deployment"`
@@ -54,17 +54,17 @@ type FooSpec struct {
 	Ingress    IngressSpec    `json:"ingress"`
 }
 
-// FooStatus is the status for a Foo resource
-type FooStatus struct {
+// AppStatus is the status for a App resource
+type AppStatus struct {
 	AvailableReplicas int32 `json:"availableReplicas"`
 }
 
 // +k8s:deepcopy-gen:interfaces=k8s.io/apimachinery/pkg/runtime.Object
 
-// FooList is a list of Foo resources
-type FooList struct {
+// AppList is a list of App resources
+type AppList struct {
 	metav1.TypeMeta `json:",inline"`
 	metav1.ListMeta `json:"metadata"`
 
-	Items []Foo `json:"items"`
+	Items []App `json:"items"`
 }
