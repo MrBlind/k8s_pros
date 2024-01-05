@@ -26,12 +26,12 @@ import (
 	types "k8s.io/apimachinery/pkg/types"
 	watch "k8s.io/apimachinery/pkg/watch"
 	testing "k8s.io/client-go/testing"
-	v1alpha1 "k8s.io/sample-controller/pkg/apis/samplecontroller/v1alpha1"
+	v1alpha1 "app-controller/pkg/apis/appcontroller/v1alpha1"
 )
 
 // FakeFoos implements FooInterface
 type FakeFoos struct {
-	Fake *FakeSamplecontrollerV1alpha1
+	Fake *FakeappcontrollerV1alpha1
 	ns   string
 }
 

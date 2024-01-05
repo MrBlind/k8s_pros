@@ -29,13 +29,13 @@ source "${CODEGEN_PKG}/kube_codegen.sh"
 #                  instead of the $GOPATH directly. For normal projects this can be dropped.
 
 kube::codegen::gen_helpers \
-    --input-pkg-root k8s.io/sample-controller/pkg/apis \
-    --output-base "$(dirname "${BASH_SOURCE[0]}")/../../.." \
+    --input-pkg-root app-controller/pkg/apis \
+    --output-base "$(dirname "${BASH_SOURCE[0]}")/../../" \
     --boilerplate "${SCRIPT_ROOT}/hack/boilerplate.go.txt"
 
 kube::codegen::gen_client \
     --with-watch \
-    --input-pkg-root k8s.io/sample-controller/pkg/apis \
-    --output-pkg-root k8s.io/sample-controller/pkg/generated \
-    --output-base "$(dirname "${BASH_SOURCE[0]}")/../../.." \
+    --input-pkg-root app-controller/pkg/apis \
+    --output-pkg-root app-controller/pkg/generated \
+    --output-base "$(dirname "${BASH_SOURCE[0]}")/../../" \
     --boilerplate "${SCRIPT_ROOT}/hack/boilerplate.go.txt"

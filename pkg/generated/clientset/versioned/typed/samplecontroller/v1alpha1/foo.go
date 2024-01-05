@@ -26,8 +26,8 @@ import (
 	types "k8s.io/apimachinery/pkg/types"
 	watch "k8s.io/apimachinery/pkg/watch"
 	rest "k8s.io/client-go/rest"
-	v1alpha1 "k8s.io/sample-controller/pkg/apis/samplecontroller/v1alpha1"
-	scheme "k8s.io/sample-controller/pkg/generated/clientset/versioned/scheme"
+	v1alpha1 "app-controller/pkg/apis/appcontroller/v1alpha1"
+	scheme "app-controller/pkg/generated/clientset/versioned/scheme"
 )
 
 // FoosGetter has a method to return a FooInterface.
@@ -57,7 +57,7 @@ type foos struct {
 }
 
 // newFoos returns a Foos
-func newFoos(c *SamplecontrollerV1alpha1Client, namespace string) *foos {
+func newFoos(c *appcontrollerV1alpha1Client, namespace string) *foos {
 	return &foos{
 		client: c.RESTClient(),
 		ns:     namespace,

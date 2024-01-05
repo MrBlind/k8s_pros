@@ -3,7 +3,7 @@
 This repository implements a simple controller for watching Foo resources as
 defined with a CustomResourceDefinition (CRD).
 
-**Note:** go-get or vendor this package as `k8s.io/sample-controller`.
+**Note:** go-get or vendor this package as `app-controller`.
 
 This particular example demonstrates how to perform basic operations such as:
 
@@ -43,8 +43,8 @@ go about fetching this demo and its dependencies.
 When NOT using go 1.11 modules, you can use the following commands.
 
 ```sh
-go get -d k8s.io/sample-controller
-cd $GOPATH/src/k8s.io/sample-controller
+go get -d app-controller
+cd $GOPATH/src/app-controller
 godep restore
 ```
 
@@ -69,7 +69,7 @@ populate the `vendor` directory.
 If you are developing Kubernetes according to
 https://github.com/kubernetes/community/blob/master/contributors/guide/github-workflow.md
 then you already have a copy of this demo in
-`kubernetes/staging/src/k8s.io/sample-controller` and its dependencies
+`kubernetes/staging/src/app-controller` and its dependencies
 --- including the code generator --- are in usable locations
 (valid for all Go versions).
 
@@ -173,7 +173,7 @@ k8s.io/client-go.
 ## Where does it come from?
 
 `sample-controller` is synced from
-https://github.com/kubernetes/kubernetes/blob/master/staging/src/k8s.io/sample-controller.
+https://github.com/kubernetes/kubernetes/blob/master/staging/src/app-controller.
 Code changes are made in that location, merged into k8s.io/kubernetes and
 later synced here.
 

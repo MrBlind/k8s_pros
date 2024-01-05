@@ -26,10 +26,10 @@ import (
 	runtime "k8s.io/apimachinery/pkg/runtime"
 	watch "k8s.io/apimachinery/pkg/watch"
 	cache "k8s.io/client-go/tools/cache"
-	samplecontrollerv1alpha1 "k8s.io/sample-controller/pkg/apis/samplecontroller/v1alpha1"
-	versioned "k8s.io/sample-controller/pkg/generated/clientset/versioned"
-	internalinterfaces "k8s.io/sample-controller/pkg/generated/informers/externalversions/internalinterfaces"
-	v1alpha1 "k8s.io/sample-controller/pkg/generated/listers/samplecontroller/v1alpha1"
+	appcontrollerv1alpha1 "app-controller/pkg/apis/appcontroller/v1alpha1"
+	versioned "app-controller/pkg/generated/clientset/versioned"
+	internalinterfaces "app-controller/pkg/generated/informers/externalversions/internalinterfaces"
+	v1alpha1 "app-controller/pkg/generated/listers/appcontroller/v1alpha1"
 )
 
 // FooInformer provides access to a shared informer and lister for
@@ -62,16 +62,16 @@ func NewFilteredFooInformer(client versioned.Interface, namespace string, resync
 				if tweakListOptions != nil {
 					tweakListOptions(&options)
 				}
-				return client.SamplecontrollerV1alpha1().Foos(namespace).List(context.TODO(), options)
+				return client.appcontrollerV1alpha1().Foos(namespace).List(context.TODO(), options)
 			},
 			WatchFunc: func(options v1.ListOptions) (watch.Interface, error) {
 				if tweakListOptions != nil {
 					tweakListOptions(&options)
 				}
-				return client.SamplecontrollerV1alpha1().Foos(namespace).Watch(context.TODO(), options)
+				return client.appcontrollerV1alpha1().Foos(namespace).Watch(context.TODO(), options)
 			},
 		},
-		&samplecontrollerv1alpha1.Foo{},
+		&appcontrollerv1alpha1.Foo{},
 		resyncPeriod,
 		indexers,
 	)
@@ -82,7 +82,7 @@ func (f *fooInformer) defaultInformer(client versioned.Interface, resyncPeriod t
 }
 
 func (f *fooInformer) Informer() cache.SharedIndexInformer {
-	return f.factory.InformerFor(&samplecontrollerv1alpha1.Foo{}, f.defaultInformer)
+	return f.factory.InformerFor(&appcontrollerv1alpha1.Foo{}, f.defaultInformer)
 }
 
 func (f *fooInformer) Lister() v1alpha1.FooLister {
